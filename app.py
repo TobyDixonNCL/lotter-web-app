@@ -35,6 +35,7 @@ app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
 # initialise database
 db = SQLAlchemy(app)
 
+
 # security headers
 csp = {
     'default-src': [
@@ -97,17 +98,25 @@ def requires_roles(*roles):
 
 if __name__ == "__main__":
     my_host = "127.0.0.1"
-    free_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    free_socket.bind((my_host, 0))
-    free_socket.listen(5)
-    free_port = free_socket.getsockname()[1]
-    free_socket.close()
+    free_port = "8080"
+
+    # Code for finding a free port
+    # free_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # free_socket.bind((my_host, 0))
+    # free_socket.listen(5)
+    # free_port = free_socket.getsockname()[1]
+    # free_socket.close()
 
     login_manager = LoginManager()
     login_manager.login_view = 'users.login'
     login_manager.init_app(app)
 
-    from models import User
+
+    from models import User, init_db
+    
+    # Call init_db to reset database and seed with just admin user
+    # init_db()
+
 
     @login_manager.user_loader
     def load_user(id):

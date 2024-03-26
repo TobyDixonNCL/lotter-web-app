@@ -58,6 +58,9 @@ def register():
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
 
+    # Clear session variables to allow for infinite login attempts
+    # session.clear()
+
     if not session.get('logins'):
         session['logins'] = 0
     elif session.get('logins') >= 3:
@@ -109,7 +112,6 @@ def login():
 
         else:
             logging.warning('SECURITY - Invalid 2FA [%s, %s]', form.email.data, request.remote_addr)
-
             flash('You have supplied an invalid 2FA token!', 'danger')
 
     return render_template('login.html', form=form)
